@@ -4,6 +4,7 @@ import 'package:eshop/screens/edit_product.dart';
 import 'package:eshop/screens/product_detail.dart';
 import 'package:eshop/screens/add_product.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
@@ -42,114 +43,152 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: Text('MA Store'),
         ),
-        body: FutureBuilder(
-          future: getProducts(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                  itemCount: snapshot.data['data'].length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      height: 240,
-                      child: Card(
-                        elevation: 5,
-                        child: Row(children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ProductDetail(
-                                            product: snapshot.data['data']
-                                                [index],
-                                          )));
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15.0)),
-                              padding: EdgeInsets.all(5),
-                              height: 120,
-                              width: 120,
-                              child: Image.network(
-                                  snapshot.data['data'][index]['image_url'],
-                                  fit: BoxFit.cover),
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.all(10.0),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      snapshot.data['data'][index]['name'],
-                                      style: TextStyle(
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(snapshot.data['data'][index]
-                                        ['description']),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            EditProduct(
-                                                              product: snapshot
-                                                                          .data[
-                                                                      'data']
-                                                                  [index],
-                                                            )));
-                                              },
-                                              child: Icon(Icons.edit)),
-                                          GestureDetector(
-                                              onTap: () {
-                                                deleteProduct(snapshot
-                                                        .data['data'][index]
-                                                            ['id']
-                                                        .toString())
-                                                    .then((value) {
-                                                  setState(() {});
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(SnackBar(
-                                                          content: Text(
-                                                              'Data berhasil dihapus')));
-                                                });
-                                              },
-                                              child: Icon(Icons.delete)),
-                                        ],
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Container(
+                  child: Text("Muhamad Ahmadin - 190511024 - K1"),
+                ),
+              ),
+              Column(
+                children: [
+                  FutureBuilder(
+                    future: getProducts(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Text("Loading...");
+                      }
+
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: snapshot.data['data'].length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                height: 240,
+                                child: Card(
+                                  elevation: 5,
+                                  child: Row(children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProductDetail(
+                                                      product: snapshot
+                                                          .data['data'][index],
+                                                    )));
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(15.0)),
+                                        padding: EdgeInsets.all(5),
+                                        height: 120,
+                                        width: 120,
+                                        child: Image.network(
+                                            snapshot.data['data'][index]
+                                                ['image_url'],
+                                            fit: BoxFit.cover),
                                       ),
-                                      Text(snapshot.data['data'][index]['price']
-                                          .toString()),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ]),
-                      ),
-                    );
-                    return Text(snapshot.data['data'][index]['name']);
-                  });
-            } else {
-              return Text('Data ERROR');
-            }
-          },
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        padding: EdgeInsets.all(10.0),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Align(
+                                              alignment: Alignment.topLeft,
+                                              child: Text(
+                                                snapshot.data['data'][index]
+                                                    ['name'],
+                                                style: TextStyle(
+                                                    fontSize: 20.0,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                            Align(
+                                              alignment: Alignment.topLeft,
+                                              child: Text(snapshot.data['data']
+                                                  [index]['description']),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          EditProduct(
+                                                                            product:
+                                                                                snapshot.data['data'][index],
+                                                                          )));
+                                                        },
+                                                        child:
+                                                            Icon(Icons.edit)),
+                                                    GestureDetector(
+                                                        onTap: () {
+                                                          deleteProduct(snapshot
+                                                                  .data['data']
+                                                                      [index]
+                                                                      ['id']
+                                                                  .toString())
+                                                              .then((value) {
+                                                            setState(() {});
+                                                            ScaffoldMessenger
+                                                                    .of(context)
+                                                                .showSnackBar(
+                                                                    SnackBar(
+                                                                        content:
+                                                                            Text('Data berhasil dihapus')));
+                                                          });
+                                                        },
+                                                        child:
+                                                            Icon(Icons.delete)),
+                                                  ],
+                                                ),
+                                                Text(snapshot.data['data']
+                                                        [index]['price']
+                                                    .toString()),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                                ),
+                              );
+                              return Text(snapshot.data['data'][index]['name']);
+                            });
+                      }
+
+                      if (snapshot.hasError) {
+                        return Text(
+                            "Terjadi error " + snapshot.error.toString());
+                      }
+
+                      return Container();
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
         ));
   }
 }
