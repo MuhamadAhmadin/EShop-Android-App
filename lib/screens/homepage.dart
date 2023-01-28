@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eshop/screens/edit_product%20copy.dart';
 import 'package:eshop/screens/product_detail.dart';
 import 'package:eshop/screens/add_product.dart';
 import 'package:flutter/material.dart';
@@ -88,7 +89,19 @@ class HomePage extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Icon(Icons.edit),
+                                      GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        EditProduct(
+                                                          product: snapshot
+                                                                  .data['data']
+                                                              [index],
+                                                        )));
+                                          },
+                                          child: Icon(Icons.edit)),
                                       Text(snapshot.data['data'][index]['price']
                                           .toString()),
                                     ],

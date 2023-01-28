@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class AddProduct extends StatelessWidget {
+class EditProduct extends StatelessWidget {
+  final Map product;
+  EditProduct({required this.product});
+
   final _formKey = GlobalKey<FormState>();
   TextEditingController _nameController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
@@ -11,27 +14,28 @@ class AddProduct extends StatelessWidget {
   TextEditingController _imageUrlController = TextEditingController();
 
   Future saveProduct() async {
-    final response =
-        await http.post(Uri.parse("http://eshop.test/api/products"), body: {
-      "name": _nameController.text,
-      "description": _descriptionController.text,
-      "price": _priceController.text,
-      "image_url": _imageUrlController.text,
-    });
+    final response = await http.put(
+        Uri.parse("http://eshop.test/api/products/" + product['id'].toString()),
+        body: {
+          "name": _nameController.text,
+          "description": _descriptionController.text,
+          "price": _priceController.text,
+          "image_url": _imageUrlController.text,
+        });
     return json.decode(response.body);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Tambah Produk")),
+      appBar: AppBar(title: Text("Edit Produk")),
       body: Form(
           key: _formKey,
           child: Column(
             children: [
               TextFormField(
-                controller: _nameController,
-                decoration: InputDecoration(labelText: "Nama Produk"),
+                controller: _nameController..text = product['name'],
+                decoration: InputDecoration(labelText: "Edit Produk"),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Nama produk tidak boleh kosong";
@@ -40,7 +44,8 @@ class AddProduct extends StatelessWidget {
                 },
               ),
               TextFormField(
-                controller: _descriptionController,
+                controller: _descriptionController
+                  ..text = product['description'],
                 decoration: InputDecoration(labelText: "Deskripsi Produk"),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -50,7 +55,8 @@ class AddProduct extends StatelessWidget {
                 },
               ),
               TextFormField(
-                controller: _priceController,
+                controller: _priceController
+                  ..text = product['price'].toString(),
                 decoration: InputDecoration(labelText: "Harga"),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -60,7 +66,7 @@ class AddProduct extends StatelessWidget {
                 },
               ),
               TextFormField(
-                controller: _imageUrlController,
+                controller: _imageUrlController..text = product['image_url'],
                 decoration: InputDecoration(labelText: "Link Gambar"),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -81,11 +87,11 @@ class AddProduct extends StatelessWidget {
                             MaterialPageRoute(
                                 builder: (context) => HomePage()));
                         ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Data berhasil disimpan')));
+                            SnackBar(content: Text('Data berhasil diupdate')));
                       });
                     }
                   },
-                  child: Text('Simpan')),
+                  child: Text('Update')),
             ],
           )),
     );
