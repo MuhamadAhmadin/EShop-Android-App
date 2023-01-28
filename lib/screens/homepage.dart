@@ -6,16 +6,27 @@ import 'package:eshop/screens/add_product.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final String url = 'http://eshop.test/api/products';
 
   Future getProducts() async {
     var response = await http.get(Uri.parse(url));
     print(json.decode(response.body));
+    return json.decode(response.body);
+  }
+
+  Future deleteProduct(String productId) async {
+    String url = "http://eshop.test/api/products/" + productId;
+    var response = await http.delete(Uri.parse(url));
     return json.decode(response.body);
   }
 
@@ -89,19 +100,39 @@ class HomePage extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        EditProduct(
-                                                          product: snapshot
-                                                                  .data['data']
-                                                              [index],
-                                                        )));
-                                          },
-                                          child: Icon(Icons.edit)),
+                                      Row(
+                                        children: [
+                                          GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            EditProduct(
+                                                              product: snapshot
+                                                                          .data[
+                                                                      'data']
+                                                                  [index],
+                                                            )));
+                                              },
+                                              child: Icon(Icons.edit)),
+                                          GestureDetector(
+                                              onTap: () {
+                                                deleteProduct(snapshot
+                                                        .data['data'][index]
+                                                            ['id']
+                                                        .toString())
+                                                    .then((value) {
+                                                  setState(() {});
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(SnackBar(
+                                                          content: Text(
+                                                              'Data berhasil dihapus')));
+                                                });
+                                              },
+                                              child: Icon(Icons.delete)),
+                                        ],
+                                      ),
                                       Text(snapshot.data['data'][index]['price']
                                           .toString()),
                                     ],
