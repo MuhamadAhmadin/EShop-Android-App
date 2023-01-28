@@ -17,7 +17,7 @@ class ProductDetail extends StatelessWidget {
             child: Image.network(product['image_url']),
           ),
           SizedBox(
-            height: 20,
+            height: 25,
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
