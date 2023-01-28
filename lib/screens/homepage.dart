@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:eshop/screens/edit_product%20copy.dart';
+import 'package:eshop/screens/edit_product.dart';
 import 'package:eshop/screens/product_detail.dart';
 import 'package:eshop/screens/add_product.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final String url = 'http://eshop.test/api/products';
+  final String url = 'https://baristawan.com/eshop/api/products';
 
   Future getProducts() async {
     var response = await http.get(Uri.parse(url));
@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future deleteProduct(String productId) async {
-    String url = "http://eshop.test/api/products/" + productId;
+    String url = "https://baristawan.com/eshop/api/products/" + productId;
     var response = await http.delete(Uri.parse(url));
     return json.decode(response.body);
   }

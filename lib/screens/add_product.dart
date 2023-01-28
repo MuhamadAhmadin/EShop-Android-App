@@ -11,8 +11,8 @@ class AddProduct extends StatelessWidget {
   TextEditingController _imageUrlController = TextEditingController();
 
   Future saveProduct() async {
-    final response =
-        await http.post(Uri.parse("http://eshop.test/api/products"), body: {
+    final response = await http
+        .post(Uri.parse("https://baristawan.com/eshop/api/products"), body: {
       "name": _nameController.text,
       "description": _descriptionController.text,
       "price": _priceController.text,

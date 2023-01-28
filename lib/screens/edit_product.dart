@@ -15,7 +15,8 @@ class EditProduct extends StatelessWidget {
 
   Future saveProduct() async {
     final response = await http.put(
-        Uri.parse("http://eshop.test/api/products/" + product['id'].toString()),
+        Uri.parse("https://baristawan.com/eshop/api/products/" +
+            product['id'].toString()),
         body: {
           "name": _nameController.text,
           "description": _descriptionController.text,
