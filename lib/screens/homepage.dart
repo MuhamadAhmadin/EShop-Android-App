@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:eshop/screens/product_detail.dart';
+import 'package:eshop/screens/add_product.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -19,6 +21,12 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AddProduct()));
+            },
+            child: Icon(Icons.add)),
         appBar: AppBar(
           title: Text('MA Store'),
         ),
@@ -30,19 +38,30 @@ class HomePage extends StatelessWidget {
                   itemCount: snapshot.data['data'].length,
                   itemBuilder: (context, index) {
                     return Container(
-                      height: 180,
+                      height: 240,
                       child: Card(
                         elevation: 5,
                         child: Row(children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15.0)),
-                            padding: EdgeInsets.all(5),
-                            height: 120,
-                            width: 120,
-                            child: Image.network(
-                                snapshot.data['data'][index]['image_url'],
-                                fit: BoxFit.cover),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ProductDetail(
+                                            product: snapshot.data['data']
+                                                [index],
+                                          )));
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15.0)),
+                              padding: EdgeInsets.all(5),
+                              height: 120,
+                              width: 120,
+                              child: Image.network(
+                                  snapshot.data['data'][index]['image_url'],
+                                  fit: BoxFit.cover),
+                            ),
                           ),
                           Expanded(
                             child: Container(
