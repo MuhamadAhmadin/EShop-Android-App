@@ -11,83 +11,98 @@ class AddProduct extends StatelessWidget {
   TextEditingController _imageUrlController = TextEditingController();
 
   Future saveProduct() async {
-    final response = await http
-        .post(Uri.parse("https://baristawan.com/eshop/api/products"), body: {
-      "name": _nameController.text,
-      "description": _descriptionController.text,
-      "price": _priceController.text,
-      "image_url": _imageUrlController.text,
-    });
+    final response = await http.post(
+        Uri.parse("https://baristawan.com/eshop_ahmadin/api/products"),
+        body: {
+          "name": _nameController.text,
+          "description": _descriptionController.text,
+          "price": _priceController.text,
+          "image_url": _imageUrlController.text,
+        });
     return json.decode(response.body);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Tambah Produk")),
-      body: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _nameController,
-                decoration: InputDecoration(labelText: "Nama Produk"),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Nama produk tidak boleh kosong";
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _descriptionController,
-                decoration: InputDecoration(labelText: "Deskripsi Produk"),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Deskripsi produk tidak boleh kosong";
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _priceController,
-                decoration: InputDecoration(labelText: "Harga"),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Harga produk tidak boleh kosong";
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _imageUrlController,
-                decoration: InputDecoration(labelText: "Link Gambar"),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Link Gambar produk tidak boleh kosong";
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      saveProduct().then((value) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomePage()));
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Data berhasil disimpan')));
-                      });
+      appBar: AppBar(
+        title: Text("Tambah Produk"),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: <Color>[Colors.black, Colors.red]),
+          ),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(38.0),
+        child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: _nameController,
+                  decoration: InputDecoration(labelText: "Nama Produk"),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Nama produk tidak boleh kosong";
                     }
+                    return null;
                   },
-                  child: Text('Simpan')),
-            ],
-          )),
+                ),
+                TextFormField(
+                  controller: _descriptionController,
+                  decoration: InputDecoration(labelText: "Deskripsi Produk"),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Deskripsi produk tidak boleh kosong";
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _priceController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(labelText: "Harga"),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Harga produk tidak boleh kosong";
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _imageUrlController,
+                  decoration: InputDecoration(labelText: "Link Gambar"),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Link Gambar produk tidak boleh kosong";
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        saveProduct().then((value) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage()));
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text('Data berhasil disimpan')));
+                        });
+                      }
+                    },
+                    child: Text('Simpan')),
+              ],
+            )),
+      ),
     );
   }
 }

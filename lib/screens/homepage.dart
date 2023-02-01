@@ -17,16 +17,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final String url = 'https://baristawan.com/eshop/api/products';
+  final String url = 'https://baristawan.com/eshop_ahmadin/api/products';
 
   Future getProducts() async {
     var response = await http.get(Uri.parse(url));
-    print(json.decode(response.body));
     return json.decode(response.body);
   }
 
   Future deleteProduct(String productId) async {
-    String url = "https://baristawan.com/eshop/api/products/" + productId;
+    String url =
+        "https://baristawan.com/eshop_ahmadin/api/products/" + productId;
     var response = await http.delete(Uri.parse(url));
     return json.decode(response.body);
   }
@@ -41,16 +41,38 @@ class _HomePageState extends State<HomePage> {
             },
             child: Icon(Icons.add)),
         appBar: AppBar(
-          title: Text('MA Store'),
+          title: Text('MA Store - Flutter'),
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: <Color>[Colors.black, Colors.red]),
+            ),
+          ),
         ),
         body: SingleChildScrollView(
           child: Column(
             children: [
+              SizedBox(
+                height: 30,
+              ),
+              Container(
+                height: 100,
+                width: 100,
+                child: Image.asset('assets/images/umc.png'),
+              ),
               Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Container(
                   child: Text("Muhamad Ahmadin - 190511024 - K1"),
                 ),
+              ),
+              Container(
+                child: Text("Tugas Pemrograman Bergerak"),
+              ),
+              SizedBox(
+                height: 30,
               ),
               Column(
                 children: [
@@ -117,7 +139,7 @@ class _HomePageState extends State<HomePage> {
                                             Align(
                                               alignment: Alignment.topLeft,
                                               child: Text(snapshot.data['data']
-                                                  [index]['description']),
+                                                  [index]['formatted_desc']),
                                             ),
                                             Row(
                                               mainAxisAlignment:
@@ -162,7 +184,8 @@ class _HomePageState extends State<HomePage> {
                                                   ],
                                                 ),
                                                 Text(snapshot.data['data']
-                                                        [index]['price']
+                                                        [index]
+                                                        ['formatted_price']
                                                     .toString()),
                                               ],
                                             ),
